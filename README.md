@@ -1,7 +1,9 @@
 What is it?
 ==============
 
-FlexiImageView is a powerful extension of Android's default ImageView.
+FlexiImageView is a powerful extension of Android's default ImageView. Note that the library is currently in active development (alpha) and is not yet fully functional. 
+
+Contributions, feature requests and bug reports are welcome. 
 
 Features
 ========
