@@ -8,8 +8,13 @@ Contributions, feature requests and bug reports are welcome.
 Features
 ========
 
-Coming soon.
-
+* Multiple shape support (circle, rectangle/square, triangle)
+* Gaussian blur effect
+* Custom border support
+* Customizable drop shadow support
+* Multiple images within the same View (à la Facebook chat heads): 
+![picture alt](http://www.textually.org/textually/archives/2013/04/09/fb-home-chat-heads-100032180-medium.jpg "Multiple images example")
+* More features coming soon!
 
 Developed By
 ============
