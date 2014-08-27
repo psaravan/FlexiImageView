@@ -21,7 +21,7 @@ import android.graphics.Bitmap;
 import com.psaravan.flexiimageview.lib.View.FlexiImageView;
 
 /**
- * Helper class that contains methods to apply shape transformations.
+ * Helper class that contains methods t apply shape transformations.
  *
  * @author Saravan Pantham
  */
