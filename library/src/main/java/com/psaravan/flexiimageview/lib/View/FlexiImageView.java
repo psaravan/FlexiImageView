@@ -51,6 +51,10 @@ public class FlexiImageView extends ImageView {
     private float mOvalVerticalRadiusFactor = 0;
     private float mOvalHorizontalRadiusFactor = 0;
 
+    //Shadow parameters.
+    private float mDropShadowRadius = 0.0f;
+    private int mDropShadowColor = 0x00000000;
+
     public FlexiImageView(Context context) {
         super(context);
         mContext = context;
@@ -96,6 +100,10 @@ public class FlexiImageView extends ImageView {
                                                        mShapeCornerRadiusFactor,
                                                        mOvalVerticalRadiusFactor,
                                                        mOvalHorizontalRadiusFactor);
+        }
+
+        if (mDropShadow==true) {
+
         }
 
         //Apply the bitmap to the View.
@@ -160,10 +168,19 @@ public class FlexiImageView extends ImageView {
      * {@link #setMultiImageBitmaps(android.graphics.Bitmap[])} or this method will have no effect.
      *
      * @param dropShadow Pass true to show a drop shadow below the View.
+     * @param shadowRadius The radius/size of the drop shadow. Pass {@code 0.0f} if you passed
+     *                     false for dropShadow.
+     * @param shadowColor The color of the drop shadow. Pass {@code 0} if you passed false for
+     *                    dropShadow.
+     *
      * @return Returns this instance to allow method chaining.
+     *
      */
-    public FlexiImageView setDropShadow(boolean dropShadow) {
+    public FlexiImageView setDropShadow(boolean dropShadow, float shadowRadius, int shadowColor) {
         mDropShadow = dropShadow;
+        mDropShadowRadius = shadowRadius;
+        mDropShadowColor = shadowColor;
+
         return this;
     }
 
@@ -196,24 +213,6 @@ public class FlexiImageView extends ImageView {
         if (mMultiImage==false)
             throw new IllegalStateException("setMultiImage(true) was not called or was set to false! " +
                                             "Call setMultiImage(true) before calling this method.");
-
-
-        return this;
-    }
-
-    /**
-     * Sets the image bitmaps to display within the ImageView.
-     *
-     * @param radius The radius of the drop shadow to draw. Higher values will create a larger drop
-     *               shadow, while lower values will result in a subtler look.
-     * @throws java.lang.IllegalStateException Exception thrown if {@code setMultiImage(true)}
-     *                                         is not called before calling this method.
-     * @return Returns this instance to allow method chaining.
-     */
-    public FlexiImageView setDropShadowRadius(float radius) {
-        if (mDropShadow==false)
-            throw new IllegalStateException("setDropShadow(true) was not called or was set to false! " +
-                    "Call setDropShadow(true) before calling this method.");
 
 
         return this;

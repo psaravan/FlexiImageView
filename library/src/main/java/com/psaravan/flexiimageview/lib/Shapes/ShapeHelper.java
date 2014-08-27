@@ -51,8 +51,8 @@ public class ShapeHelper {
                 Oval oval = new Oval(mContext);
                 return oval.applyShape(bitmap, verticalRadius, horizontalRadius);
             case FlexiImageView.SHAPE_EQUILATERAL_TRIANGLE:
-                Triangle triangle = new Triangle(mContext);
-                return null;
+                EquilateralTriangle triangle = new EquilateralTriangle(mContext);
+                return triangle.applyShape(bitmap);
             default:
                 return bitmap;
         }

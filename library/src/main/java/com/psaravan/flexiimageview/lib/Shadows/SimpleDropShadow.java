@@ -13,34 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.psaravan.flexiimageview.lib.Shapes;
+package com.psaravan.flexiimageview.lib.Shadows;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 
 /**
- * Contains methods to perform a triangle shape transformation.
+ * Helper class that applies a simple drop shadow to the specified bitmap object.
  *
  * @author Saravan Pantham
  */
-public class Triangle extends BaseShape {
+public class SimpleDropShadow {
 
-    private Context mContext;
+    public void applyShadow(Bitmap bitmap, float shadowRadius, int shadowColor) {
 
-    public Triangle(Context context) {
-        mContext = context;
-    }
-
-    @Override
-    public Bitmap applyShape(Bitmap bitmap, float verticalRadiusFactor, float horizontalRadiusFactor) {
-
-        return null;
-    }
-
-    @Override
-    public Bitmap applyShape(Bitmap bitmap) {
-
-        return null;
     }
 
 }

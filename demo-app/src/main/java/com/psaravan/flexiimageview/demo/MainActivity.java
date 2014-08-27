@@ -19,9 +19,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mFlexiImageView = (FlexiImageView) findViewById(R.id.flexiImageView);
-        mFlexiImageView.setShape(FlexiImageView.SHAPE_OVAL)
-                       .setOvalVerticalRadius(3.0f)
-                       .setOvalHorizontalRadius(5.0f)
+        mFlexiImageView.setShape(FlexiImageView.SHAPE_EQUILATERAL_TRIANGLE)
                        .setImageBitmap(BitmapFactory.decodeResource(getResources(),
                                                                     R.drawable.test));
 

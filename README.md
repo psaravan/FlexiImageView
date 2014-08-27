@@ -10,6 +10,7 @@ Features
 
 * Multiple shape support (circle, rectangle/square, triangle)
 * Gaussian blur effect
+* Reflections
 * Custom border support
 * Customizable drop shadow support
 * Multiple images within the same View (à la Facebook chat heads): 
