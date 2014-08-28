@@ -51,8 +51,22 @@
         <!-- APPLYING VIEW EFFECTS -->
         <h4>Using FlexiImageView's features</h4>
         <p>First, create an instance of FlexiImageView within the Activity or Fragment where you added the view: </p>
-        
+
         <pre><code>FlexiImageView flexiImageView = (FlexiImageView) findViewById(R.id.flexiImageView);</code></pre>
+        
+        <p>You can now use FlexiImageView's public methods to apply effects/customize your view.</p>
+        <p><b>NOTE: </b> You must call/set all your view options before setting your view's bitmap/drawable/drawable resource.</p>
+        <p>Here's an example that changes the view's shape to an oval: </p>
+        
+        <pre><code>mFlexiImageView.setShape(FlexiImageView.SHAPE_OVAL)
+                       .setOvalHorizontalRadius(0.75f)
+                       .setOvalVerticalRadius(0.25f)
+                       .setImageBitmap(BitmapFactory.decodeResource(getResources(),
+                                                                    R.drawable.test));</code></pre>
+
+        <p>And here's the result: </p>
+        
+        
 
       </section>
     </div>
