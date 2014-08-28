@@ -61,11 +61,18 @@
 mFlexiImageView.setShape(FlexiImageView.SHAPE_OVAL)
                .setOvalHorizontalRadius(0.75f)
                .setOvalVerticalRadius(0.25f)
-               .draw()</code></pre>
+               .draw();</code></pre>
 
         <p>And here's the result: </p>
         
         
+        <p>Here's a few important points to note: 
+          <ul>
+            <li>The draw() method is what actually displays the image in the view container.</li>
+            <li>The draw() method should be the last method you call on your FlexiImageView instance. If you change any of the FlexiImageView's properties, you must call draw() again to reflect the changes.</li>
+            <li>You must call setImageBitmap(), setImageResource(), or setImageDrawable() before calling the draw() method.</li>
+          </ul>
+        </p>
 
       </section>
     </div>
