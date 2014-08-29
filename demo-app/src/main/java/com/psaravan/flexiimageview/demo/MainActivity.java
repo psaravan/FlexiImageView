@@ -1,7 +1,6 @@
 package com.psaravan.flexiimageview.demo;
 
 import android.app.Activity;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,9 +18,9 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mFlexiImageView = (FlexiImageView) findViewById(R.id.flexiImageView);
+        mFlexiImageView.setImageResource(R.drawable.test);
         mFlexiImageView.setShape(FlexiImageView.SHAPE_EQUILATERAL_TRIANGLE)
-                       .setImageBitmap(BitmapFactory.decodeResource(getResources(),
-                                                                    R.drawable.test));
+                       .draw();
 
     }
 

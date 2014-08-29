@@ -17,8 +17,16 @@ package com.psaravan.flexiimageview.lib.View;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.psaravan.flexiimageview.lib.Shapes.ShapeHelper;
@@ -32,6 +40,16 @@ public class FlexiImageView extends ImageView {
 
     //Context.
     private Context mContext;
+
+    //Image bitmap properties.
+    private Bitmap mBitmap;
+    private Paint mPaint;
+    private Paint mShadowPaint;
+    private Path mPath;
+    private Canvas mCanvas;
+    private BitmapShader mBitmapShader;
+    private int mRectWidth;
+    private int mRectHeight;
 
     //Feature flags.
     private int mShape = -1;
@@ -53,6 +71,8 @@ public class FlexiImageView extends ImageView {
 
     //Shadow parameters.
     private float mDropShadowRadius = 0.0f;
+    private float mDropShadowDx = 0.0f;
+    private float mDropShadowDy = 0.0f;
     private int mDropShadowColor = 0x00000000;
 
     public FlexiImageView(Context context) {
@@ -69,45 +89,101 @@ public class FlexiImageView extends ImageView {
 
     @Override
     public void setImageBitmap(Bitmap bitmap) {
-
         //Check to make sure a valid bitmap was passed in.
-        if (bitmap==null || bitmap.getWidth() <= 0 || bitmap.getHeight() <=0) {
+        if (bitmap==null || bitmap.getWidth() <= 0 || bitmap.getHeight() <= 0) {
             super.setImageBitmap(null);
             return;
         }
 
-        applyAndSetBitmapEffects(bitmap);
+        mBitmap = bitmap;
+    }
 
+    @Override
+    public void setImageResource(int resourceId) {
+        //Check to make sure a valid resource id was passed in.
+        if (resourceId <= 0) {
+            super.setImageBitmap(null);
+            return;
+        }
+
+        mBitmap = BitmapFactory.decodeResource(mContext.getResources(), resourceId);
+    }
+
+    @Override
+    public void setImageDrawable(Drawable drawable) {
+
+        /*
+         * Need to call the superclass implementation because
+         * setImageBitmap() indirectly relies on this method.
+         */
+        super.setImageDrawable(drawable);
+
+        //Check to make sure a valid drawable was passed in.
+        if (drawable==null) {
+            super.setImageDrawable(drawable);
+            return;
+        }
+
+        mBitmap = ((BitmapDrawable) drawable).getBitmap();
     }
 
     /**
      * Determines which effects have been enabled by the user, applies those effects to the
-     * specified bitmap, and then sets it to the View container.
+     * view's image, and then displays the image.
      *
-     * @param originalBitmap The original bitmap object that is passed in through the default
-     *                       {@link #setImageBitmap(android.graphics.Bitmap)} method.
-     *
+     * @throws java.lang.IllegalStateException Exception thrown if
+     *                                         {@link #setImageBitmap(android.graphics.Bitmap)},
+     *                                         {@link #setImageDrawable(android.graphics.drawable.Drawable)},
+     *                                         or {@link #setImageResource(int)} is not called before
+     *                                         calling this method.
      */
-    private void applyAndSetBitmapEffects(Bitmap originalBitmap) {
+    public void draw() throws IllegalStateException {
 
-        //Create a new Bitmap object to apply the transformations to.
-        Bitmap transformedBitmap = Bitmap.createBitmap(originalBitmap);
+        if (mBitmap==null)
+            throw new IllegalStateException("You must set an image source (bitmap, drawable, or " +
+                                            "drawable resource before calling draw().");
+
+        //Create a new output Bitmap to apply the transformations to.
+        Bitmap transformedBitmap = Bitmap.createBitmap(mBitmap);
 
         //Apply the correct shape transformation to the bitmap.
         if (mShape > -1) {
-            ShapeHelper shapeHelper = new ShapeHelper(mContext);
-            transformedBitmap = shapeHelper.applyShape(originalBitmap, mShape,
-                                                       mShapeCornerRadiusFactor,
+            ShapeHelper shapeHelper = new ShapeHelper(mContext, this);
+            transformedBitmap = shapeHelper.applyShape(mBitmap, mShape, mShapeCornerRadiusFactor,
                                                        mOvalVerticalRadiusFactor,
                                                        mOvalHorizontalRadiusFactor);
         }
 
-        if (mDropShadow==true) {
+        //Apply the shadow if the user enabled it.
+        if (mDropShadow==true)
+            applyShadow(mDropShadowRadius, mDropShadowDx, mDropShadowDy, mDropShadowColor);
 
+        //Allow the superclass implementation to display the final bitmap.
+        super.setImageBitmap(transformedBitmap);
+    }
+
+    /**
+     * Applies a shadow layer behind this view.
+     *
+     * @param shadowRadius The radius/size of the shadow.
+     * @param dx The horizontal offset of the shadow behind the view.
+     * @param dy The vertical offset of the shadow behind the view.
+     * @param shadowColor The color of the shadow.
+     */
+    private Bitmap applyShadow(float shadowRadius, float dx,
+                            float dy, int shadowColor) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            this.setLayerType(View.LAYER_TYPE_SOFTWARE, mPaint);
+            mPaint.setShadowLayer(shadowRadius, dx, dy, shadowColor);
         }
 
-        //Apply the bitmap to the View.
-        super.setImageBitmap(transformedBitmap);
+        //Draw the new Bitmap with the shadow.
+        Bitmap output = Bitmap.createBitmap(mBitmap.getWidth(), mBitmap.getHeight(),
+                                            Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        return null;
+
     }
 
     /**
@@ -170,16 +246,21 @@ public class FlexiImageView extends ImageView {
      * @param dropShadow Pass true to show a drop shadow below the View.
      * @param shadowRadius The radius/size of the drop shadow. Pass {@code 0.0f} if you passed
      *                     false for dropShadow.
+     * @param dx The horizontal offset of the shadow behind the view.
+     * @param dy The vertical offset of the shadow behind the view.
      * @param shadowColor The color of the drop shadow. Pass {@code 0} if you passed false for
      *                    dropShadow.
      *
      * @return Returns this instance to allow method chaining.
      *
      */
-    public FlexiImageView setDropShadow(boolean dropShadow, float shadowRadius, int shadowColor) {
+    public FlexiImageView setDropShadow(boolean dropShadow, float shadowRadius,
+                                        float dx, float dy, int shadowColor) {
         mDropShadow = dropShadow;
         mDropShadowRadius = shadowRadius;
         mDropShadowColor = shadowColor;
+        mDropShadowDx = dx;
+        mDropShadowDy = dy;
 
         return this;
     }
@@ -266,6 +347,61 @@ public class FlexiImageView extends ImageView {
 
     public int getShape() {
         return mShape;
+    }
+
+    public Paint getPaint() {
+        return mPaint;
+    }
+
+    public Canvas getCanvas() {
+        return mCanvas;
+    }
+
+    public Path getPath() {
+        return mPath;
+    }
+
+    public BitmapShader getBitmapShader() {
+        return mBitmapShader;
+    }
+
+    public int getRectWidth() {
+        return mRectWidth;
+    }
+
+    public int getRectHeight() {
+        return mRectHeight;
+    }
+
+    /**
+     * Public setter methods.
+     */
+    public void setRectWidth(int rectWidth) {
+        mRectWidth = rectWidth;
+    }
+
+    public void setRectHeight(int rectHeight) {
+        mRectHeight = rectHeight;
+    }
+
+    public void setCanvas(Canvas canvas) {
+        mCanvas = canvas;
+    }
+
+    public void setPaint(Paint paint) {
+        mPaint = paint;
+    }
+
+    public void setShadowPaint(Paint shadowPaint) {
+        mShadowPaint = shadowPaint;
+    }
+
+    public void setPath(Path path) {
+        mPath = path;
+    }
+
+    public void setBitmapShader(BitmapShader bitmapShader) {
+        mBitmapShader = bitmapShader;
     }
 
 }

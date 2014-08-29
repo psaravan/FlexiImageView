@@ -28,9 +28,11 @@ import com.psaravan.flexiimageview.lib.View.FlexiImageView;
 public class ShapeHelper {
 
     private Context mContext;
+    private FlexiImageView mView;
 
-    public ShapeHelper(Context context) {
+    public ShapeHelper(Context context, FlexiImageView view) {
         mContext = context;
+        mView = view;
     }
 
     /**
@@ -51,7 +53,7 @@ public class ShapeHelper {
                 Oval oval = new Oval(mContext);
                 return oval.applyShape(bitmap, verticalRadius, horizontalRadius);
             case FlexiImageView.SHAPE_EQUILATERAL_TRIANGLE:
-                EquilateralTriangle triangle = new EquilateralTriangle(mContext);
+                EquilateralTriangle triangle = new EquilateralTriangle(mContext, mView);
                 return triangle.applyShape(bitmap);
             default:
                 return bitmap;

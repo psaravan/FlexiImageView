@@ -21,10 +21,9 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.Shader;
+
+import com.psaravan.flexiimageview.lib.View.FlexiImageView;
 
 /**
  * Contains methods to perform a triangle shape transformation.
@@ -34,9 +33,11 @@ import android.graphics.Shader;
 public class EquilateralTriangle extends BaseShape {
 
     private Context mContext;
+    private FlexiImageView mView;
 
-    public EquilateralTriangle(Context context) {
+    public EquilateralTriangle(Context context, FlexiImageView view) {
         mContext = context;
+        mView = view;
     }
 
     @Override
@@ -60,8 +61,8 @@ public class EquilateralTriangle extends BaseShape {
             height = width;
         }
 
-        Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
+        Bitmap output = Bitmap.createBitmap(width, height + 50, Bitmap.Config.ARGB_8888);
+        mView.setCanvas(new Canvas(output));
 
         //Calculate the coordinates of the triangle's vertices.
         int x1, x2, x3;
@@ -79,22 +80,23 @@ public class EquilateralTriangle extends BaseShape {
         x3 = width;
         y3 = height;
 
-        Paint paint = new Paint();
-        Path path = new Path();
+        mView.setPaint(new Paint());
+        mView.setPath(new Path());
 
-        BitmapShader bms = new BitmapShader(bitmap, Shader.TileMode.REPEAT , Shader.TileMode.REPEAT  );
-        paint.setStyle(Paint.Style.FILL);
-        paint.setShader(bms);
+        mView.setBitmapShader(new BitmapShader(bitmap, Shader.TileMode.CLAMP,
+                              Shader.TileMode.CLAMP));
+        mView.getPaint().setStyle(Paint.Style.FILL);
+        mView.getPaint().setShader(mView.getBitmapShader());
 
-        path.reset();
-        path.setFillType(Path.FillType.EVEN_ODD);
-        path.moveTo(x1, y1);
-        path.lineTo(x2, y2);
-        path.lineTo(x3, y3);
-        path.close();
+        mView.getPath().reset();
+        mView.getPath().setFillType(Path.FillType.EVEN_ODD);
+        mView.getPath().moveTo(x1, y1);
+        mView.getPath().lineTo(x2, y2);
+        mView.getPath().lineTo(x3, y3);
+        mView.getPath().close();
 
-        canvas.drawPath(path, paint);
-        paint.setShader(null);
+        //Draw a path cutout from the overall bitmap.
+        mView.getCanvas().drawPath(mView.getPath(), mView.getPaint());
 
         return output;
     }
