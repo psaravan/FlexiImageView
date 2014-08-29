@@ -40,6 +40,11 @@ public class ShapeHelper {
      *
      * @param bitmap The bitmap to apply the shape transformation on.
      * @param shape The shape to apply.
+     * @param cornerRadius The corner radius factor if you want rounded edges.
+     * @param verticalRadius Only used if you are creating an oval. Specifies how much to stretch
+     *                       the oval vertically.
+     * @param horizontalRadius Only used if you are creating an oval. Specifies how much to stretch
+     *                         the oval horizontally.
      */
     public Bitmap applyShape(Bitmap bitmap, int shape, float cornerRadius,
                              float verticalRadius, float horizontalRadius) {

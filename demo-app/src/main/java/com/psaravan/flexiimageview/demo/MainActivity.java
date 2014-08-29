@@ -1,6 +1,7 @@
 package com.psaravan.flexiimageview.demo;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ public class MainActivity extends Activity {
         mFlexiImageView = (FlexiImageView) findViewById(R.id.flexiImageView);
         mFlexiImageView.setImageResource(R.drawable.test);
         mFlexiImageView.setShape(FlexiImageView.SHAPE_EQUILATERAL_TRIANGLE)
+                       .setShadow(true, 50.0f, 0.0f, 10.0f, Color.BLACK)
                        .draw();
 
     }

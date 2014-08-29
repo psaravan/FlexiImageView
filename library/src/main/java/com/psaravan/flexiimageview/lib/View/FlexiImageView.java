@@ -24,9 +24,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.psaravan.flexiimageview.lib.Shapes.ShapeHelper;
@@ -56,7 +54,7 @@ public class FlexiImageView extends ImageView {
     private boolean mBlur = false;
     private boolean mBorder = false;
     private boolean mMultiImage = false;
-    private boolean mDropShadow = false;
+    private boolean mShadow = false;
 
     //Shape constants.
     public static final int SHAPE_RECTANGLE = 0;
@@ -70,10 +68,10 @@ public class FlexiImageView extends ImageView {
     private float mOvalHorizontalRadiusFactor = 0;
 
     //Shadow parameters.
-    private float mDropShadowRadius = 0.0f;
-    private float mDropShadowDx = 0.0f;
-    private float mDropShadowDy = 0.0f;
-    private int mDropShadowColor = 0x00000000;
+    private float mShadowRadius = 0.0f;
+    private float mShadowDx = 0.0f;
+    private float mShadowDy = 0.0f;
+    private int mShadowColor = 0x00000000;
 
     public FlexiImageView(Context context) {
         super(context);
@@ -143,47 +141,16 @@ public class FlexiImageView extends ImageView {
             throw new IllegalStateException("You must set an image source (bitmap, drawable, or " +
                                             "drawable resource before calling draw().");
 
-        //Create a new output Bitmap to apply the transformations to.
-        Bitmap transformedBitmap = Bitmap.createBitmap(mBitmap);
-
         //Apply the correct shape transformation to the bitmap.
         if (mShape > -1) {
             ShapeHelper shapeHelper = new ShapeHelper(mContext, this);
-            transformedBitmap = shapeHelper.applyShape(mBitmap, mShape, mShapeCornerRadiusFactor,
-                                                       mOvalVerticalRadiusFactor,
-                                                       mOvalHorizontalRadiusFactor);
-        }
+            mBitmap = shapeHelper.applyShape(mBitmap, mShape, mShapeCornerRadiusFactor,
+                                             mOvalVerticalRadiusFactor, mOvalHorizontalRadiusFactor);
 
-        //Apply the shadow if the user enabled it.
-        if (mDropShadow==true)
-            applyShadow(mDropShadowRadius, mDropShadowDx, mDropShadowDy, mDropShadowColor);
+        }
 
         //Allow the superclass implementation to display the final bitmap.
-        super.setImageBitmap(transformedBitmap);
-    }
-
-    /**
-     * Applies a shadow layer behind this view.
-     *
-     * @param shadowRadius The radius/size of the shadow.
-     * @param dx The horizontal offset of the shadow behind the view.
-     * @param dy The vertical offset of the shadow behind the view.
-     * @param shadowColor The color of the shadow.
-     */
-    private Bitmap applyShadow(float shadowRadius, float dx,
-                            float dy, int shadowColor) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            this.setLayerType(View.LAYER_TYPE_SOFTWARE, mPaint);
-            mPaint.setShadowLayer(shadowRadius, dx, dy, shadowColor);
-        }
-
-        //Draw the new Bitmap with the shadow.
-        Bitmap output = Bitmap.createBitmap(mBitmap.getWidth(), mBitmap.getHeight(),
-                                            Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-        return null;
-
+        super.setImageBitmap(mBitmap);
     }
 
     /**
@@ -243,7 +210,7 @@ public class FlexiImageView extends ImageView {
      * Sets whether the ImageView will have multiple images drawn inside it. Make sure you call
      * {@link #setMultiImageBitmaps(android.graphics.Bitmap[])} or this method will have no effect.
      *
-     * @param dropShadow Pass true to show a drop shadow below the View.
+     * @param shadow Pass true to show a shadow under the View.
      * @param shadowRadius The radius/size of the drop shadow. Pass {@code 0.0f} if you passed
      *                     false for dropShadow.
      * @param dx The horizontal offset of the shadow behind the view.
@@ -254,13 +221,13 @@ public class FlexiImageView extends ImageView {
      * @return Returns this instance to allow method chaining.
      *
      */
-    public FlexiImageView setDropShadow(boolean dropShadow, float shadowRadius,
-                                        float dx, float dy, int shadowColor) {
-        mDropShadow = dropShadow;
-        mDropShadowRadius = shadowRadius;
-        mDropShadowColor = shadowColor;
-        mDropShadowDx = dx;
-        mDropShadowDy = dy;
+    public FlexiImageView setShadow(boolean shadow, float shadowRadius,
+                                    float dx, float dy, int shadowColor) {
+        mShadow = shadow;
+        mShadowRadius = shadowRadius;
+        mShadowColor = shadowColor;
+        mShadowDx = dx;
+        mShadowDy = dy;
 
         return this;
     }
@@ -345,12 +312,20 @@ public class FlexiImageView extends ImageView {
         return mOvalHorizontalRadiusFactor;
     }
 
+    public Bitmap getBitmap() {
+        return mBitmap;
+    }
+
     public int getShape() {
         return mShape;
     }
 
     public Paint getPaint() {
         return mPaint;
+    }
+
+    public Paint getShadowPaint() {
+        return mShadowPaint;
     }
 
     public Canvas getCanvas() {
@@ -365,12 +340,44 @@ public class FlexiImageView extends ImageView {
         return mBitmapShader;
     }
 
+    public float getShadowDx() {
+        return mShadowDx;
+    }
+
+    public float getShadowDy() {
+        return mShadowDy;
+    }
+
+    public float getShadowRadius() {
+        return mShadowRadius;
+    }
+
+    public int getShadowColor() {
+        return mShadowColor;
+    }
+
     public int getRectWidth() {
         return mRectWidth;
     }
 
     public int getRectHeight() {
         return mRectHeight;
+    }
+
+    public boolean isBlurEnabled() {
+        return mBlur;
+    }
+
+    public boolean isBorderEnabled() {
+        return mBorder;
+    }
+
+    public boolean isMultiImage() {
+        return mMultiImage;
+    }
+
+    public boolean isShadowEnabled() {
+        return mShadow;
     }
 
     /**

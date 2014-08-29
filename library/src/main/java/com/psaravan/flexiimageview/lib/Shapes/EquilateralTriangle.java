@@ -19,9 +19,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Shader;
+import android.os.Build;
+import android.view.View;
 
 import com.psaravan.flexiimageview.lib.View.FlexiImageView;
 
@@ -61,7 +64,17 @@ public class EquilateralTriangle extends BaseShape {
             height = width;
         }
 
-        Bitmap output = Bitmap.createBitmap(width, height + 50, Bitmap.Config.ARGB_8888);
+        //Increase the size of the final bitmap to account for the shadow.
+        int widthWithShadow = width;
+        int heightWithShadow = height;
+        if (mView.isShadowEnabled()) {
+            widthWithShadow += (int) mView.getShadowRadius();
+            heightWithShadow += (int) mView.getShadowRadius();
+
+        }
+
+        Bitmap output = Bitmap.createBitmap(widthWithShadow, heightWithShadow,
+                                            Bitmap.Config.ARGB_8888);
         mView.setCanvas(new Canvas(output));
 
         //Calculate the coordinates of the triangle's vertices.
@@ -95,10 +108,34 @@ public class EquilateralTriangle extends BaseShape {
         mView.getPath().lineTo(x3, y3);
         mView.getPath().close();
 
+        //Check if we need to draw a shadow.
+        if (mView.isShadowEnabled())
+            applyShadow();
+
         //Draw a path cutout from the overall bitmap.
         mView.getCanvas().drawPath(mView.getPath(), mView.getPaint());
 
         return output;
+    }
+
+    /**
+     * Draws a shadow under the primary image layer.
+     */
+    public void applyShadow() {
+        mView.setShadowPaint(new Paint());
+        mView.getShadowPaint().setShader(mView.getBitmapShader());
+        mView.getShadowPaint().setColor(Color.WHITE);
+        mView.getShadowPaint().setShadowLayer(mView.getShadowRadius(),
+                                              mView.getShadowDx(),
+                                              mView.getShadowDy(),
+                                              mView.getShadowColor());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            mView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+
+        //Draw the shadow.
+        mView.getCanvas().drawPath(mView.getPath(), mView.getShadowPaint());
+
     }
 
 }
