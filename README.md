@@ -38,26 +38,3 @@ Copyright 2014 - Saravan Pantham
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
-
-
-
- [1]: http://cyrilmottier.com/2013/05/24/pushing-the-actionbar-to-the-next-level/
- [2]: https://raw.github.com/ManuelPeinado/FadingActionBar/master/art/readme_pic.png
- [3]: https://github.com/ManuelPeinado/FadingActionBar/tree/master/samples-stock
- [4]: https://github.com/ManuelPeinado/FadingActionBar/blob/master/samples-stock/src/com/manuelpeinado/fadingactionbar/demo/ScrollViewActivity.java
- [5]: https://github.com/ManuelPeinado/FadingActionBar/blob/master/samples-stock/src/com/manuelpeinado/fadingactionbar/demo/ListViewActivity.java
- [6]: https://github.com/ManuelPeinado/FadingActionBar/blob/master/samples-stock/src/com/manuelpeinado/fadingactionbar/demo/WebViewActivity.java
- [7]: https://github.com/ManuelPeinado/FadingActionBar/blob/master/samples-stock/src/com/manuelpeinado/fadingactionbar/demo/SampleFragment.java
- [8]: http://cyrilmottier.com
- [9]: https://github.com/antoniolg
- [10]: https://github.com/mozarcik/
- [11]: https://play.google.com/store/apps/details?id=com.yavorivanov.android.danswithme
- [12]: https://play.google.com/store/apps/details?id=com.juannale.pearljamlyricsapp
- [13]: https://play.google.com/store/apps/details?id=com.etheralstudios.weatherize
- [14]: https://play.google.com/store/apps/details?id=com.garli.lastfm
- [15]: https://play.google.com/store/apps/details?id=com.praxis.splol
- [16]: https://play.google.com/store/apps/details?id=com.designloaf.gasmonitor
- [17]: https://play.google.com/store/apps/details?id=com.simukoni.mobile.rss
- [18]: https://play.google.com/store/apps/details?id=ru.xlebstudio.nightmuseum
- [19]: https://play.google.com/store/apps/details?id=com.ivanenr.lfflfeedreader
