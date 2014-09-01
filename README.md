@@ -5,8 +5,8 @@ FlexiImageView is a powerful extension of Android's default ImageView. Note that
 
 Contributions, feature requests and bug reports are welcome. 
 
-Features
-========
+Features (under development)
+============================
 
 * Multiple shape support (circle, rectangle/square, triangle)
 * Gaussian blur effect
